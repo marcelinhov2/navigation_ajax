@@ -1,0 +1,9 @@
+.clear{ clear:both; }
+#wrap{ width:1000px; margin:0 auto; }
+
+#menu{ list-style:none; margin:0; padding:0; }
+#menu li{ float:left; margin-right:10px; }
+
+#header{ height:200px; background:red; }
+
+#content{ height:200px; background:yellow; }
