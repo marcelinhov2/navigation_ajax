@@ -9,6 +9,8 @@ var response;
 var response_header;
 var response_content;
 
+var default_page = 'cases.html';
+
 function redirect()
 {
 	window.location = "#/" + $(this).attr('href').replace( ".html" , "" );
@@ -27,6 +29,8 @@ function route()
 	
 	if( path != '.html' )
 		load( path );
+	else
+	 load( default_page )	
 }
 
 function destroy()
@@ -67,9 +71,13 @@ function load( url )
       
       if( response_header != '' )
         $( '#header_content' ).text( response_header );
+      else
+        $( '#header_content' ).load( default_page + ' #header_content' );
 
       if( response_content != '' )
         $( '#content' ).text( response_content );
+      else
+        $( '#content' ).load( default_page + ' #content' );
   }});
 
 	// $('#header_content').load( url +' #header_content', after_load );
