@@ -5,6 +5,10 @@ $(document).ready(function(){
 
 var path;
 
+var response;
+var response_header;
+var response_content;
+
 function redirect()
 {
 	window.location = "#/" + $(this).attr('href').replace( ".html" , "" );
@@ -51,10 +55,25 @@ function hide_preloader()
 
 function load( url )
 {
-	// console.log( 'load' );
 	show_preloader();
-	$('#header_content').load( url +' #header_content', after_load );
-	$('#content').load( url +' #content', after_load );
+	
+	$.ajax({ url: url, success: function( text ){
+	    // response = Variavel com toda resposta da página 
+      response = $(text);
+	    // response_header = Variavel com a resposta da página( Header ) 
+      response_header = response.filter('#header_content').text();
+	    // response_content = Variavel com a resposta da página( Content ) 
+      response_content = response.filter('#content').text();
+      
+      if( response_header != '' )
+        $( '#header_content' ).text( response_header );
+
+      if( response_content != '' )
+        $( '#content' ).text( response_content );
+  }});
+
+	// $('#header_content').load( url +' #header_content', after_load );
+	// $('#content').load( url +' #content', after_load );
 }
 
 function after_load()
