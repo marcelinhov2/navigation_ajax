@@ -1,7 +1,4 @@
-$(document).ready(function(){
-	SWFAddress.addEventListener(SWFAddressEvent.CHANGE, route);
-	$('#menu a').click( redirect )
-})
+$(document).ready( initialize )
 
 var initialized = false;
 var first_time = false;
@@ -9,10 +6,19 @@ var first_time = false;
 var loading;
 
 var header_content_height;
-var header_mask_height;
-var header_mask_actual;
+var header_mask_height_default;
+var header_mask_height_current;
 
-loading = '<span class="load">Loading</span>';
+
+function initialize(){
+	SWFAddress.addEventListener(SWFAddressEvent.CHANGE, route);
+	$('#menu a').click( redirect );
+	
+	loading = '<span class="load">Loading</span>';
+	
+	header_mask_height_default = $( '#header_mask' ).css('min-height').replace('px' , '');
+	header_mask_height_current = header_mask_height_default;
+}
 
 function redirect()
 {
@@ -68,30 +74,23 @@ function render()
     $( '#content' ).fadeIn();
     
 	header_content_height = $( '#header_content' ).height();
-	header_mask_height = $( '#header_mask' ).css('min-height').replace('px' , '');
 		
-	if( header_content_height >= header_mask_actual )
+	if( header_content_height >= header_mask_height_current )
 		animate_header_down();
 	else
 		animate_header_up();
 		
-	header_mask_actual = $( '#header_mask' ).height();
+	header_mask_height_current = $( '#header_mask' ).height();
 }
 
 function animate_header_down()
 {
-	if( !first_time )
-	{
-		$('#header_mask').height( header_mask_height );
-		first_time = true;
-	}
-    
     $('#header_mask').animate({ height: header_content_height }, { duration: 500 });	
 }
 
 function animate_header_up()
 {
-    $('#header_mask').animate({ height: header_mask_height }, { duration: 500 });	
+    $('#header_mask').animate({ height: header_mask_height_default }, { duration: 500 });	
 }
 
 function show_preloader()

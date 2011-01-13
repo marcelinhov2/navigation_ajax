@@ -7,7 +7,7 @@ body{ padding:0; margin:0; }
 #menu li{ float:left; margin-right:10px; }
 
 #header{ background:red; position:relative; min-height:150px; }
-#header_mask{ overflow:hidden; min-height:150px; }
+#header_mask{ overflow:hidden; min-height:150px; height:150px; }
 #header_content{ position:relative; display:none; }
 
 #container_content{ position:relative; min-height:300px; }
