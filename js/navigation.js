@@ -3,8 +3,16 @@ $(document).ready(function(){
 	$('#menu a').click( redirect )
 })
 
-var default_url = 'cases.html';
 var initialized = false;
+var first_time = false;
+
+var loading;
+
+var header_content_height;
+var header_mask_height;
+var header_mask_actual;
+
+loading = '<span class="load">Loading</span>';
 
 function redirect()
 {
@@ -28,13 +36,9 @@ function route()
 	path += "&action="+ action;
 	path += "&params="+ params;
 	
-	// console.log( path );
-	// Busca o conteúdo na página correta;
-	// console.log( window.location.toString() );
 	
+	// Desmonta pagina atual e no callback busca o conteúdo na página correta;
     destroy( proxy( this, load, path ) );
-	// else
-	//  load( default_url )	
 }
 
 function destroy( callback )
@@ -42,40 +46,71 @@ function destroy( callback )
     if( ! initialized )
     {
         initialized = true;
+        header_mask_actual = $( '#header_mask' ).css('min-height').replace('px' , '');
         callback();
     }
 	else
 	{
+		// FadeOut na page atual;
+		// No callback, carrega a próxima página e exibe o preloader;
 		$( '#header_content' ).fadeOut( "slow" );
 		$( '#content' ).fadeOut( "slow", callback );
 	}
-	// FadeOut na page atual;
-	// No callback, carrega a próxima página e exibe o preloader;
 }
 
 function render()
 {
+	//Remove Loader
+	$('.load').remove();
+	
+	//FadeIn do conteúdo
     $( '#header_content' ).fadeIn();
     $( '#content' ).fadeIn();
-	// console.log( 'render content' );
-	//FadeIn do conteúdo
+    
+	header_content_height = $( '#header_content' ).height();
+	header_mask_height = $( '#header_mask' ).css('min-height').replace('px' , '');
+		
+	console.log( header_content_height + ' Content Height' );
+    console.log( header_mask_actual + ' Mask Actual Height' );
+	
+	if( header_content_height >= header_mask_actual )
+		animate_header_down();
+	else
+		animate_header_up();
+		
+	header_mask_actual = $( '#header_mask' ).height();
+}
+
+function animate_header_down()
+{
+	if( !first_time )
+	{
+		$('#header_mask').height( header_mask_height );
+		first_time = true;
+	}
+    
+    $('#header_mask').animate({ height: header_content_height }, { duration: 500 });	
+}
+
+function animate_header_up()
+{
+    $('#header_mask').animate({ height: header_mask_height }, { duration: 500 });	
 }
 
 function show_preloader()
 {
-    $('#header').append('<p class="load">Loading</p>')
-    $('#container_content').append('<p class="load">Loading</p>')
-	// console.log( 'show_preloader' );
 	//FadeIn Loader
+    $('#header').append( loading );
+    $('#container_content').append( loading );
+    
+    $( '.load' ).fadeIn();
 }
 
 function hide_preloader()
 {
-	console.log( 'hide_preloader' );
-    $('#header .load').fadeOut();
-    $('#container_content .load').fadeOut();
 	//FadeOut Loader
-	render();
+    $('#header .load').fadeOut();
+    $('#container_content .load').fadeOut('slow', render );
 }
 
 function load( url )
@@ -104,9 +139,7 @@ function after_load( text )
 	//   \$( '#content' ).load( default_url + ' #content' );
 	
 	hide_preloader();
-	render();
 }
-
 
 function proxy( scope, method, params )
 {

@@ -1,9 +1,14 @@
+body{ padding:0; margin:0; }
 .clear{ clear:both; }
+.load{ position:absolute; top:50%; left:50%; background:url(../images/loader.gif) no-repeat top left; width:220px; height:19px; margin:-9px 0 0 -110px; text-indent:-9999px; }
 #wrap{ width:1000px; margin:0 auto; }
 
 #menu{ list-style:none; margin:0; padding:0; }
 #menu li{ float:left; margin-right:10px; }
 
-#header{ height:200px; background:red; }
+#header{ background:red; position:relative; min-height:150px; }
+#header_mask{ overflow:hidden; min-height:150px; }
+#header_content{ position:relative; display:none; }
 
-#content{ height:200px; background:yellow; }
+#container_content{ position:relative; min-height:300px; }
+#content{ background:yellow; position:relative; display:none; }
