@@ -70,9 +70,6 @@ function render()
 	header_content_height = $( '#header_content' ).height();
 	header_mask_height = $( '#header_mask' ).css('min-height').replace('px' , '');
 		
-	console.log( header_content_height + ' Content Height' );
-    console.log( header_mask_actual + ' Mask Actual Height' );
-	
 	if( header_content_height >= header_mask_actual )
 		animate_header_down();
 	else
